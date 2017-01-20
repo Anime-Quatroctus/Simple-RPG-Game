@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 
 import dev.anime.rpg.base.GameHandler;
 import dev.anime.rpg.base.characters.Character;
+import dev.anime.rpg.base.characters.Characters;
 import dev.anime.rpg.base.characters.Party;
 import dev.anime.rpg.base.data.ISaveable;
 import dev.anime.rpg.base.data.SaveManager;
@@ -23,6 +24,7 @@ public class EntityPlayer extends EntityAlive implements ISaveable {
 	
 	public EntityPlayer(GameHandler handler) {
 		super(handler);
+		currentParty = new Party(new Character[]{Characters.MAIN_PROTANGONIST, null, null, null, null});
 		SaveManager.load(this);
 	}
 	

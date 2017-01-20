@@ -10,6 +10,8 @@ public class BattleObjectStats {
 	
 	private static int maxLevel = 99;
 	
+	private Integer health, psi;
+	
 	private Integer[] baseStats = new Integer[]{0, 0, 0, 0, 0, 0, 0}, maxIncrements = new Integer[]{0, 0, 0, 0, 0, 0, 0}, minIncrements = new Integer[]{0, 0, 0, 0, 0, 0, 0}, currentStats = new Integer[]{0, 0, 0, 0, 0, 0, 0}, bonusStats = new Integer[]{0, 0, 0, 0, 0, 0, 0};
 	
 	private Double[] incrementChances = new Double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
@@ -22,6 +24,8 @@ public class BattleObjectStats {
 			this.minIncrements[i] = minStatIncrements[i];
 			this.incrementChances[i] = incrementChances[i];
 		}
+		this.health = currentStats[StatConstants.MAX_HEALTH];
+		this.psi = currentStats[StatConstants.MAX_PSI];
 	}
 	
 	private int getAmountOfCalculations(double chance) {
@@ -40,10 +44,12 @@ public class BattleObjectStats {
 		}
 		statIncrement /= 3;
 		this.addStat(ID, statIncrement);
-		double oldChance = incrementChances[ID];
-		double temp = 0;
-		this.incrementChances[ID] += (double) (temp = rand.nextDouble() > oldChance ? oldChance / 4 : temp / 2);
-		if (incrementChances[ID] > 1.0) incrementChances[ID] = 1.0;
+		if (level < 60) {
+			double oldChance = incrementChances[ID];
+			double temp = 0;
+			this.incrementChances[ID] += (double) (temp = rand.nextDouble() > oldChance ? oldChance / 4 : temp / 2);
+			if (incrementChances[ID] > 1.0) incrementChances[ID] = 1.0;
+		}
 	}
 	
 	private void handleHealthAndPSIIncrement(int ID) {
@@ -57,25 +63,31 @@ public class BattleObjectStats {
 			}
 			if (multiplier > 1) statIncrement *= multiplier;
 			this.addStat(ID, statIncrement);
-			double oldChance = incrementChances[ID];
-			double temp = 0;
-			this.incrementChances[ID] += (double) (temp = rand.nextDouble() > oldChance ? oldChance / 4 : temp / 2);
+			this.health += statIncrement;
+			if (level < 60) {
+				double oldChance = incrementChances[ID];
+				double temp = 0;
+				this.incrementChances[ID] += (double) (temp = rand.nextDouble() > oldChance ? oldChance / 4 : temp / 2);
+			}
 		} else if (ID == 1) { // Handling "Max PSI" increase.
 			if (maxIncrements[ID] == 0) return;
 			int statIncrement = 0;
 			int basePSI = baseStats[ID];
 			int currentMaxPSI = currentStats[ID];
-			double multiplier = (currentMaxPSI / 100) + (basePSI / 10);
+			double multiplier = (currentMaxPSI / 700) + (basePSI / 10);
 			for (int i = 0 ; i < getAmountOfCalculations(incrementChances[ID]); i++) {
 				statIncrement += rand.nextInt(maxIncrements[ID] - minIncrements[ID]) + minIncrements[ID];
 			}
 			if (multiplier > 1) statIncrement *= multiplier;
 			this.addStat(ID, statIncrement);
-			double oldChance = incrementChances[ID];
-			double temp = 0;
-			this.incrementChances[ID] += (double) (temp = rand.nextDouble() > oldChance ? oldChance / 4 : temp / 2);
+			this.psi += statIncrement;
+				if (level < 60) {
+				double oldChance = incrementChances[ID];
+				double temp = 0;
+				this.incrementChances[ID] += (double) (temp = rand.nextDouble() > oldChance ? oldChance / 4 : temp / 2);
+			}
+			if (incrementChances[ID] > 1.0) incrementChances[ID] = 1.0;
 		}
-		if (incrementChances[ID] > 1.0) incrementChances[ID] = 1.0;
 	}
 	
 	public boolean levelUp() {
@@ -111,6 +123,14 @@ public class BattleObjectStats {
 		if (ID >= 0 && ID < StatConstants.NUM_OF_STATS) {
 			currentStats[ID] -= amount;
 		}
+	}
+	
+	public void setHealth(int amount) {
+		this.health = amount;
+	}
+	
+	public void setPSI(int amount) {
+		this.psi = amount;
 	}
 	
 	public void setStat(int ID, int amount) {
@@ -182,6 +202,14 @@ public class BattleObjectStats {
 	
 	public Double[] getChances() {
 		return incrementChances;
+	}
+	
+	public Integer getHealth() {
+		return health;
+	}
+	
+	public Integer getPSI() {
+		return psi;
 	}
 	
 	public Integer[] getCurrentStats() {

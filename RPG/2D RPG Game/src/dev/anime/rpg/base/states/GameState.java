@@ -27,7 +27,7 @@ public class GameState extends State {
 		if (KeyManager.PRESSED_KEYBINDS[KeyConstants.ACTIVATE] == true && StateManager.getInstance().getCurrentState().getCurrentUI() == null) {
 			this.setCurrentUI(new UIInGameMenu(handler));
 		}
-		WorldManager.getInstance().getCurrentWorld().tickWorld();
+		WorldManager.getInstance().getCurrentWorld().tickWorld(); // Handles UI internally
 		if (getCurrentUI() != null) getCurrentUI().tickUI();
 	}
 	

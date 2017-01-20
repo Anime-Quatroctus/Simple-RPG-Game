@@ -46,6 +46,10 @@ public class KeyManager implements KeyListener, ISaveable {
 		SaveManager.save(this);
 	}
 	
+	public static String getKeyName(int keyCode) {
+		return KeyEvent.getKeyText(keyCode);
+	}
+	
 	@Override
 	public boolean isGlobal() {
 		return true;
@@ -84,5 +88,4 @@ public class KeyManager implements KeyListener, ISaveable {
 		public static final int TOTAL_KEYBINDS = 5, UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, ACTIVATE = 4;
 		
 	}
-	
 }

@@ -52,7 +52,7 @@ public class Game implements Runnable {
 		Tiles.initializeTiles();
 		
 		StateManager.initializeStates(handler = new GameHandler(this));
-		StateManager.getInstance().setCurrentState(StateManager.gameState);
+		StateManager.getInstance().setCurrentState(StateManager.menuState);
 	}
 	
 	/** The main game loop calls both {@link baseRender() render} and {@link gameTick() tick} **/

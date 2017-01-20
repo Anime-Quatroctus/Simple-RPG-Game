@@ -4,7 +4,9 @@ import dev.anime.rpg.base.data.ISaveable;
 
 public class Party implements ISaveable {
 	
-	private Character[] currentParty = new Character[5];
+	public static final int PARTY_LENGTH = 5;
+	
+	private Character[] currentParty = new Character[PARTY_LENGTH];
 	
 	private String[] saveKeys = new String[]{};
 	
@@ -50,6 +52,10 @@ public class Party implements ISaveable {
 			}
 		}
 		return false;
+	}
+	
+	public Character getCharacter(int position) {
+		return currentParty[position];
 	}
 	
 	/** Grabs a list of all party members names. **/

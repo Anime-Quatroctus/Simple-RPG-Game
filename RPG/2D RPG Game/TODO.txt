@@ -1,11 +1,12 @@
-1. Make a Main Menu (New State).
-2. Finish InGameMenuUI main screen.
-3. Make keybind changer In InGameMenuUI and from MainMenu.
-4. Create a player stat screen in InGameMenuUI.
+1. Make a Main Menu (New State). Done needs better graphics.
+2. Finish InGameMenuUI main screen. (More or less done needs some more graphics.)
+3. Make keybind changer In InGameMenuUI and in MainMenu.
+4. Create a character stat screen in InGameMenuUI.
 5. Create some basic items.
 6. Create Inventory Object in player and save/load it.
 7. Create some basic equipment for testing.
 8. Create Inventory screen.
 9. Create equipment screen.
 10. Add JavaDoc for all methods in need of one.
-11. Think of more things to do.
+11. Implement a time counter.
+12. Think of more things to do.

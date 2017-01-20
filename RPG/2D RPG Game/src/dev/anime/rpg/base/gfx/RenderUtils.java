@@ -67,16 +67,24 @@ public class RenderUtils {
 		g.drawImage(image, x, y, width, height, null);
 	}
 	
-	public static void drawRoundedBoxWithBorder(Graphics g, Color backgroundColor, Color border, int x, int y, int width, int height, int thickness) {
+	public static void drawRoundedBoxWithBorder(Graphics g, Color backgroundColor, Color borderColor, int x, int y, int width, int height, int thickness) {
+		addRoundBackGroundRect(g, backgroundColor, x + thickness, y + thickness, width - thickness, height - thickness);
+		drawRoundedBorder(g, borderColor, x, y, width, height, thickness);
+	}
+	
+	public static void addRoundBackGroundRect(Graphics g, Color backgroundColor, int x, int y, int width, int height) {
+		g.setColor(backgroundColor);
+		g.fillRect(x, y, width, height);
+	}
+	
+	public static void drawRoundedBorder(Graphics g, Color borderColor, int x, int y, int width, int height, int thickness) {
 		Graphics2D TDG = (Graphics2D) g;
-		TDG.setColor(backgroundColor);
-		TDG.fillRect(x + thickness, y + thickness, width - thickness, height - thickness);
+		TDG.setColor(borderColor);
 		TDG.setStroke(new BasicStroke(thickness));
-		TDG.setColor(border);
 		TDG.drawRoundRect(x + (thickness / 2), y + (thickness / 2), width - thickness, height - thickness, 2, 2);
-		TDG.setColor(border.darker().darker());
+		TDG.setColor(borderColor.darker().darker());
 		TDG.setStroke(new BasicStroke(thickness / 2));
-		TDG.drawRoundRect(x + (thickness / 3), y + (thickness / 3), width - (thickness / 2), height - (thickness / 2), 2, 2);
+		TDG.drawRoundRect(x + (int) (thickness / 3.1), y + (int) (thickness / 3.1), (int) (width - (thickness / 2)), (int) (height - (thickness / 2)), 2, 2);
 	}
 	
 }

@@ -7,7 +7,7 @@ import dev.anime.rpg.base.data.SaveManager;
 
 public class Character extends BattleObject implements ISaveable {
 	
-	private final String[] dataKeys = new String[]{"MAX HEALTH", "MAX PSI", "STRENGTH", "MAGIC STRENGTH", "PHYSICAL DEFENSE", "MAGIC DEFENSE", "SPEED", "XP", "TOTAL XP", "LEVEL UP XP", "LEVEL", "HCHANCE", "PSICHANCE", "STRCHANCE", "MSTRCHANCE", "PDEFCHANCE", "MDEFCHANCE", "SCHANCE"};
+	private final String[] dataKeys = new String[]{"MAX HEALTH", "MAX PSI", "STRENGTH", "MAGIC STRENGTH", "PHYSICAL DEFENSE", "MAGIC DEFENSE", "SPEED", "XP", "TOTAL XP", "LEVEL UP XP", "LEVEL", "HEALTH", "PSI", "HCHANCE", "PSICHANCE", "STRCHANCE", "MSTRCHANCE", "PDEFCHANCE", "MDEFCHANCE", "SCHANCE"};
 	
 	private CharacterClass characterClass;
 	
@@ -52,7 +52,7 @@ public class Character extends BattleObject implements ISaveable {
 
 	@Override
 	public Object[] getSaveData() {
-		return Utils.addArrays(Utils.addArrays(boStats.getCurrentStats(), new Integer[]{boStats.getXP(), boStats.getTotalXP(), boStats.getRequiredXP(), boStats.getLevel()}), boStats.getChances());
+		return Utils.addArrays(Utils.addArrays(boStats.getCurrentStats(), new Integer[]{boStats.getXP(), boStats.getTotalXP(), boStats.getRequiredXP(), boStats.getLevel(), boStats.getHealth(), boStats.getPSI()}), boStats.getChances());
 	}
 
 	@Override
@@ -65,8 +65,10 @@ public class Character extends BattleObject implements ISaveable {
 		if (newData[StatConstants.NUM_OF_STATS + 1] != null) boStats.setTotalXP((int) newData[StatConstants.NUM_OF_STATS + 1]);
 		if (newData[StatConstants.NUM_OF_STATS + 2] != null) boStats.setRequiredXP((int) newData[StatConstants.NUM_OF_STATS + 2]);
 		if (newData[StatConstants.NUM_OF_STATS + 3] != null) boStats.setLevel((int) newData[StatConstants.NUM_OF_STATS + 3]);
+		if (newData[StatConstants.NUM_OF_STATS + 4] != null) boStats.setHealth((int) newData[StatConstants.NUM_OF_STATS + 4]);
+		if (newData[StatConstants.NUM_OF_STATS + 5] != null) boStats.setPSI((int) newData[StatConstants.NUM_OF_STATS + 5]);
 		for (i = 0; i < StatConstants.NUM_OF_STATS; i++) {
-			if (newData[StatConstants.NUM_OF_STATS + 4 + i] != null)  boStats.setChance(i, (double) newData[i + (StatConstants.NUM_OF_STATS + 4)]);
+			if (newData[StatConstants.NUM_OF_STATS + 6 + i] != null)  boStats.setChance(i, (double) newData[i + (StatConstants.NUM_OF_STATS + 6)]);
 		}
 		
 	}

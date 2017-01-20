@@ -5,7 +5,7 @@ import dev.anime.rpg.base.GameHandler;
 public class StateManager {
 	
 	
-//	public static MenuState menuState;
+	public static MenuState menuState;
 	public static GameState gameState;
 	
 	private static StateManager stateManager;
@@ -18,6 +18,7 @@ public class StateManager {
 	}
 	
 	public static void initializeStates(GameHandler handler) {
+		menuState = new MenuState(handler);
 		gameState = new GameState(handler);
 	}
 	
