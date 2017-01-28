@@ -1,11 +1,18 @@
 package dev.anime.rpg.base.data;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -36,8 +43,103 @@ public class SaveManager {
 	/** Saves {@link SAVEABLE_OBJECTS saves} to their files. **/
 	public static void saveSaveables() {
 		for (Entry<String, ISaveable> entry : SAVEABLE_OBJECTS.entrySet()) {
-			save(entry.getValue());
+			saveUsingCustomFile(entry.getValue());
 		}
+	}
+	
+	public static void saveUsingCustomFile(ISaveable save) {
+		String dir = (save.isGlobal() ? "" : CURRENT_SAVE_SLOT + "/") + save.getFileDir();
+		File folders = new File(dir);
+		File json = new File(dir, save.getFileName() + ".save");
+		try {
+			if (folders.mkdirs()) {
+				if (json.createNewFile()) {
+					json.setReadable(true);
+					json.setWritable(true);
+				} else {
+					if (json.delete()) {
+						if (json.createNewFile()) {
+							json.setReadable(true);
+							json.setWritable(true);
+						}
+					}
+				}
+			} else {
+				if (json.delete()) {
+					if (json.createNewFile()) {
+						json.setReadable(true);
+						json.setWritable(true);
+					}
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			OutputStream stream = new FileOutputStream(json);
+			for (Object obj : save.getSaveData()) {
+//				System.out.println(obj);
+				for (Object b : SaveByteConverter.convertToByteCode(obj)) {
+					stream.write(((Byte)b).byteValue());
+				}
+			}
+			stream.flush();
+			stream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void loadUsingCustomFile(ISaveable save) {
+		if (new File((save.isGlobal() ? "" : CURRENT_SAVE_SLOT + "/") + save.getFileDir() + save.getFileName() + ".save").exists()) {
+			// TODO: Make readDataFromCustomFile
+			save.setDataFromLoad(readDataFromCustomFile((save.isGlobal() ? "" : CURRENT_SAVE_SLOT + "/") + save.getFileDir() + save.getFileName() + ".save", save.getSaveTags().length));
+//			save.setDataFromLoad(readDataFromJSON((save.isGlobal() ? "" : CURRENT_SAVE_SLOT + "/") + save.getFileDir() + save.getFileName() + ".save", save.getSaveTags()));
+		} else {
+			saveUsingCustomFile(save);
+		}
+	}
+	
+	private static Object[] readDataFromCustomFile(String filePath, int size) {
+		Object[] data = new Object[size];
+		List<Byte> bytes = new ArrayList<Byte>();
+		try {
+			InputStream stream = new FileInputStream(filePath);
+			while (stream.available() > 0) {
+				bytes.add((byte) stream.read());
+			}
+			for (int i = 0; i < size; i++) {
+				List<Byte> bs = new ArrayList<Byte>();
+				Iterator<Byte> it = bytes.iterator();
+				bs.add(it.next());
+				it.remove();
+				boolean last127 = true;
+				while (it.hasNext()) {
+					byte b = it.next();
+					if (b <= 126 && last127) {
+						bs.add(b);
+						it.remove();
+						last127 = false;
+						continue;
+					} else if (!last127 && b == 127) {
+						it.remove();
+						last127 = true;
+						continue;
+					}
+//					if (b != 127) {
+//						bs.add(b);
+//						it.remove();
+//						continue;
+//					}
+//					it.remove();
+					break;
+				}
+				data[i] = SaveByteConverter.convertFromByteCode(bs.toArray());
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return data;
 	}
 	
 	/** Saves the ISaveable to its path. **/

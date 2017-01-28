@@ -14,7 +14,9 @@ public class Character extends BattleObject implements ISaveable {
 	public Character(String name, BattleObjectStats stats, CharacterClass characterClass) {
 		super(name, stats);
 		this.characterClass = characterClass;
-		SaveManager.load(this);
+		SaveManager.addObjectToBeSaved(this);
+		SaveManager.loadUsingCustomFile(this);
+//		SaveManager.saveUsingCustomFile(this);
 	}
 	
 	public BattleObjectStats getStats() {

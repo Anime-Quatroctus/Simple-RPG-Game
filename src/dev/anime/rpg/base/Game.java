@@ -97,10 +97,10 @@ public class Game implements Runnable {
 	/** Saves game data when closed. **/
 	public void saveGameData() {
 		SaveManager.saveSaveables();
-		SaveManager.save(handler.getKeyManager());
-		SaveManager.save(WorldManager.getInstance().getCurrentWorld().getManager().getPlayer());
-		SaveManager.save(WorldManager.getInstance().getCurrentWorld());
-		SaveManager.save(Characters.MAIN_PROTANGONIST);
+//		SaveManager.save(handler.getKeyManager());
+//		SaveManager.save(WorldManager.getInstance().getCurrentWorld().getManager().getPlayer());
+//		SaveManager.save(WorldManager.getInstance().getCurrentWorld());
+//		SaveManager.save(Characters.MAIN_PROTANGONIST);
 		System.out.println("Data saved on exit.");
 	}
 	
